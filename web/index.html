@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>msdown — YouTube to MP3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bgCanvas"></canvas>
+    <div class="app">
+        <header class="app-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="14" stroke="#00ff88" stroke-width="2"/>
+                    <path d="M12 10v12l10-6z" fill="#00ff88"/>
+                </svg>
+                <span class="logo-text">msdown</span>
+            </div>
+            <p class="tagline">YouTube to MP3 — paste, download, done</p>
+        </header>
+
+        <main class="main-content">
+            <section class="url-section">
+                <textarea id="urlInput" placeholder="https://music.youtube.com/playlist?list=..." rows="2"></textarea>
+                <div class="url-actions">
+                    <button id="checkBtn" class="btn btn-secondary" onclick="checkInfo()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        Check
+                    </button>
+                    <button id="downloadBtn" class="btn btn-primary" onclick="startDownload()" style="display:none">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download ZIP
+                    </button>
+                </div>
+            </section>
+
+            <section id="infoPanel" class="info-panel hidden">
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <h2 id="infoTitle"></h2>
+                        <span id="infoSource" class="badge"></span>
+                    </div>
+                    <div id="infoDetails" class="info-grid"></div>
+                    <p id="infoDesc" class="info-desc"></p>
+                    <div id="infoTags" class="info-tags"></div>
+                </div>
+            </section>
+
+            <section id="progressSection" class="progress-section hidden">
+                <div class="progress-track">
+                    <div id="progressBar" class="progress-fill"></div>
+                </div>
+                <div class="progress-info">
+                    <span id="progressText">Starting...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+            </section>
+
+            <section id="resultSection" class="result-section hidden">
+                <div class="result-icon">&#10003;</div>
+                <h2 id="resultTitle">Done</h2>
+                <p id="resultMessage"></p>
+                <a id="downloadLink" class="btn btn-download" href="#">Download ZIP</a>
+                <button class="btn btn-ghost" onclick="resetPage()">New Download</button>
+            </section>
+
+            <section id="errorSection" class="result-section hidden">
+                <div class="result-icon">&#10007;</div>
+                <h2 id="errorTitle">Error</h2>
+                <p id="errorMessage"></p>
+                <button class="btn btn-ghost" onclick="resetPage()">Try Again</button>
+            </section>
+
+            <div id="pollingOverlay" class="hidden">
+                <div class="spinner"></div>
+                <p>Processing your download...</p>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>Powered by yt-dlp &middot; ffmpeg &middot; Flask</p>
+        </footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

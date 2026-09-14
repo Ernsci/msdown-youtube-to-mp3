@@ -5,10 +5,10 @@ import uuid
 import zipfile
 import threading
 import subprocess
-from flask import Flask, render_template, request, jsonify, send_file, abort
+from flask import Flask, render_template, request, jsonify, send_file, abort, send_from_directory
 from downloader import fetch_complete_info, normalize_url, detect_source
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='web', template_folder='web')
 
 JOB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jobs')
 os.makedirs(JOB_DIR, exist_ok=True)
@@ -17,7 +17,11 @@ jobs = {}
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return send_from_directory('web', 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory('web', path)
 
 @app.route('/api/info', methods=['POST'])
 def api_info():
