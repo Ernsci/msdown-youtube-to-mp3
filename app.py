@@ -1,27 +1,28 @@
 import os
-import json
 import time
 import uuid
 import zipfile
 import threading
-import subprocess
-from flask import Flask, render_template, request, jsonify, send_file, abort, send_from_directory
-from downloader import fetch_complete_info, normalize_url, detect_source
+from flask import Flask, request, jsonify, send_file, abort, send_from_directory
+from downloader import fetch_complete_info, normalize_url
 
-app = Flask(__name__, static_folder='web', template_folder='web')
+app = Flask(__name__)
 
 JOB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'jobs')
 os.makedirs(JOB_DIR, exist_ok=True)
 
+WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'web')
 jobs = {}
 
 @app.route('/')
 def index():
-    return send_from_directory('web', 'index.html')
+    return send_from_directory(WEB_DIR, 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    return send_from_directory('web', path)
+    if path.startswith('api/'):
+        abort(404)
+    return send_from_directory(WEB_DIR, path)
 
 @app.route('/api/info', methods=['POST'])
 def api_info():
